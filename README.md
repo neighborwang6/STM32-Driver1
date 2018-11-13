@@ -14,3 +14,13 @@
    2、两次事件发生时候，两次捕捉的定时器的值的大小关系无法确定，所以需要判断。
    3、上升沿已经发生，下降沿还没有来。计数器计数超过一个以及以上的计数器周期。需要对重装次数进行记录。
    
+   __IO uint32_t Update_Flag_Counter = 0;               //溢出次数的检测
+  __IO uint16_t IC3ReadValue1 = 0, IC3ReadValue2 = 0;   //上升沿事件发生时记录的数据，下降沿事件发生时记录的数据
+  __IO uint16_t CaptureNumber = 0;                      //事件种类的标记。（上升/下降沿事件）
+  __IO uint32_t Pulse_Width_Counter = 0;                //两次事件捕捉之间计数器走过的数量。
+  __IO uint32_t Distance_Counter = 0;                   //数组的下标变量，作为数组遍历使用
+  
+  #具体流程：当程序发生中断时：
+    1、首先判断是不是因为溢出update事件引发的中断，如果是，就不执行接下来的边沿判断。Update_Flag_Counter += 1。
+    2、如果不是，则进行边沿判断通过CaptureNumber的值进行判断。
+    
